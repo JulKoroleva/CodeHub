@@ -204,15 +204,22 @@ const store = createStore({
     // },
 
     deleteFile(state) {
-      if (state.selectedRepository && state.selectedFile) {
+      console.log('start:')
+      console.log('selectedRepository:', state.selectedRepository)
+      if (state.selectedRepository && state.selectedFile || state.expandedFolder) {
+        console.log('state.selectedFile:', state.selectedFile)
         const repository = state.selectedRepository;
-    
+        console.log('repository:', repository)
         const removeFile = (entity) => {
+          console.log('enter to remove file:', entity)
           if (Array.isArray(entity)) {
+            console.log('entity is array:', entity)
             entity.forEach((child, index) => {
+              
               if (child.type === 'folder') {
-                console.log('child === state.expandedFolder',child,state.expandedFolder)
+                
                 if (child === state.expandedFolder) {
+                  console.log('child === state.expandedFolder', entity)
                   entity.splice(index, 1);
                 } else {
                   removeFile(child.children);

@@ -293,17 +293,19 @@ export default {
       if (item.type === 'file'){
         this.$store.commit("setSelectedFile", this.item);
       }
+        if (item.type === 'folder') {
+        
+        this.$store.commit("setSelectedFolder", item);
+        this.$store.commit("deleteFile");
+        console.log("хочу удалиться")
+      }
       if (this.$store.state.selectedFile) {
         const selectedFileId = this.$store.state.selectedFile.id;
         this.$store.commit("deleteFile");
         console.log("хочу удалиться")
         this.$store.commit("setSelectedFile", null);
       }
-      if (this.$store.state.expandedFolder) {
-        const expandedFolder = this.$store.state.expandedFolder.lastModified;
-        this.$store.commit("deleteFile");
-        console.log("хочу удалиться")
-      }
+    
     },
   },
 };
