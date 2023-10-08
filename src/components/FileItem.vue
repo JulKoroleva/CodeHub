@@ -99,11 +99,11 @@
             class="new-folder_btn"
             @click="createFolder"
             style="
-    border: none;
-    border-bottom: 1px solid black;
-    color: #27282d;
-    opacity: this.item.level >= 6 ? 0.5 : 1;
-  "
+              border: none;
+              border-bottom: 1px solid black;
+              color: #27282d;
+              opacity: this.item.level >= 6 ? 0.9 : 1;
+            "
             v-else
           >
             folder
