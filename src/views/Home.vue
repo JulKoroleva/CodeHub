@@ -79,11 +79,9 @@ export default {
 
       timeline
         .to(description, { opacity: 0, scale: 0.6, duration: 0 }, "-=2")
-        .to(description, { opacity: 1, scale: 1, duration: 2 }, "-=2");
-
-      timeline
+        .to(description, { opacity: 1, scale: 1, duration: 2 }, "-=2")
         .to(logo, { opacity: 0, x: -150, duration: 0 })
-        .to(logo, { opacity: 1, x: 0, duration: 2 }, "-=1.3");
+        .to(logo, { opacity: 1, x: 0, duration: 2 }, "-=1.8");
     },
   },
 };
@@ -202,7 +200,6 @@ a:last-of-type {
 }
 .description {
   opacity: 0;
-  font-family: Verdana, Geneva, sans-serif;
   font-size: 18px;
   letter-spacing: 2px;
   word-spacing: 2px;
