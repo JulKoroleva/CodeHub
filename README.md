@@ -28,7 +28,6 @@ Once you're done with your code, you can download your files. This is useful if 
 **Download files:** When finished, click "Download file" to save your code to your computer.
 
 ## Getting Started
-### Option 1: Webpack
 1.  Clone this repository to your local machine.
    
     `git clone https://github.com/JulKoroleva/CodeHub.git` 
