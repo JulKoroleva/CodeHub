@@ -1,10 +1,10 @@
 <template>
   <div class="repositories-container">
-    <h2 @click="createRepository">Список репозиториев</h2>
+    <h2 @click="createRepository">Repository List</h2>
     <div class="create-repository__container" :class="{ expanded: shifted }">
       <input
         v-model="newRepositoryName"
-        placeholder="Новый репозиторий"
+        placeholder="New Repository"
         class="create-repository__container_input"
         @keydown.enter="createRepository"
         maxlength="30"
@@ -80,7 +80,7 @@ export default {
           "hidden",
           !this.shifted && this.isInputAnimationComplete
         );
-      }, 1000); // Измените это значение в зависимости от вашего предпочтения
+      }, 1000);
     },
     handleKeyUp(event) {
       if (event.key === "Enter") {
@@ -90,8 +90,7 @@ export default {
 
     createRepository() {
       if (this.newRepositoryName.trim() === "") {
-        // Проверка на пустой ввод
-        this.newRepositoryName = "Новый репозиторий";
+        this.newRepositoryName = "New Repository";
       }
       this.$store.dispatch("createRepository", this.newRepositoryName);
       this.newRepositoryName = "";
@@ -101,21 +100,19 @@ export default {
       );
     },
     createFolderInRepository() {
-      const folderName = prompt("Введите имя папки:") || "Новая папка";
+      const folderName = prompt("Enter new folder name:") || "New Folder";
       this.$store.dispatch("createFolderInRepository", folderName);
     },
 
     createFileInRepository() {
-      const fileName = prompt("Введите имя файла:") || "Новый файл";
+      const fileName = prompt("Enter new file name:") || "NewFile";
       this.$store.dispatch("createFileInRepository", fileName);
     },
     selectFileHandler(selectedFile) {
       this.$store.dispatch("selectFile", selectedFile);
       console.log("selectedFile!:", selectedFile);
     },
-    downloadRepository() {
-      // Ваша логика для скачивания репозитория
-    },
+    downloadRepository() {},
     toggleRepository(repository) {
       if (this.expandedRepository === repository) {
         this.expandedRepository = null;
@@ -138,22 +135,21 @@ export default {
   overflow-x: hidden;
   min-height: 300px;
   padding: 0 0 77px 0;
-  scrollbar-width: thin; /* Для Firefox */
-  scrollbar-color: #4e5253 transparent; /* Цвет полосы прокрутки и фона */
+  scrollbar-width: thin;
+  scrollbar-color: #4e5253 transparent;
 }
 
-/* Для WebKit (Chrome, Safari) */
 .repositories-list::-webkit-scrollbar {
-  width: 3px; /* Ширина полосы прокрутки */
+  width: 3px;
 }
 
 .repositories-list::-webkit-scrollbar-thumb {
-  background-color: #4e5253; /* Цвет полосы прокрутки */
+  background-color: #4e5253;
   border-radius: 30px;
 }
 
 .repositories-list::-webkit-scrollbar-track {
-  background-color: transparent; /* Фон полосы прокрутки */
+  background-color: transparent;
   border-radius: 30px;
 }
 
@@ -192,8 +188,8 @@ export default {
 }
 
 .create-repository__container_btn.button-shifted.hidden {
-  width: 30px; /* Добавлено свойство width */
-  right: -30px; /* Добавлено свойство right */
+  width: 30px;
+  right: -30px;
 }
 .create-repository__container_btn.button-shifted {
   right: 0;
@@ -226,8 +222,8 @@ export default {
 .create-repository__container input {
   position: absolute;
   top: 0;
-  left: 30px; /* Изменено свойство left */
-  width: calc(100% - 60px); /* Изменено свойство width */
+  left: 30px;
+  width: calc(100% - 60px);
   height: 100%;
   margin: 0;
   opacity: 0;

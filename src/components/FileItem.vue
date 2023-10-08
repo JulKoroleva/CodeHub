@@ -1,6 +1,6 @@
 <template>
   <div class="repository-container">
-    <div class="soso"></div>
+    <div class="underline"></div>
     <div
       class="control"
       @dblclick="renameItem"
@@ -85,18 +85,37 @@
             class="new-folder_btn"
             @click="createFolder"
             style="
-              background-color: transparent;
               border: none;
               border-bottom: 1px solid black;
               color: #27282d;
+              opacity: 0.3;
             "
+            v-if="this.item.level >= 6"
+            :disabled="this.item.level >= 6"
+          >
+            folder
+          </button>
+          <button
+            class="new-folder_btn"
+            @click="createFolder"
+            style="
+    border: none;
+    border-bottom: 1px solid black;
+    color: #27282d;
+    opacity: this.item.level >= 6 ? 0.5 : 1;
+  "
+            v-else
           >
             folder
           </button>
           <button
             class="new-file_btn"
             @click="createFile"
-            style="background-color: transparent; border: none; color: #27282d"
+            style="
+              background-color: rgba(197, 197, 197);
+              border: none;
+              color: #27282d;
+            "
           >
             file
           </button>
@@ -112,6 +131,7 @@
       @cancel="handleCancel"
       :itemType="modalType"
       @create="handleCreate"
+      :level="level + 1"
     />
 
     <div
@@ -203,6 +223,7 @@ export default {
     toggleCreateButtons(folder) {
       this.createMenuVisible = !this.createMenuVisible;
       this.$store.dispatch("setSelectedFolder", folder);
+      console.log("Current level:", this.item.level);
     },
     closeCreateButtons() {
       this.createMenuVisible = false;
@@ -212,7 +233,7 @@ export default {
         this.createFolder(itemName);
       } else if (itemType === "file") {
         this.createFile(itemName);
-        console.log("создали файл");
+        console.log("create file");
       }
       this.showModal = false;
       this.$store.dispatch("setSelectedFolder", this.expandedFolder);
@@ -220,12 +241,12 @@ export default {
     },
     createFolder() {
       this.showModal = true;
-      this.modalPrompt = "Введите название папки";
+      this.modalPrompt = "New Folder Name";
       this.modalType = "folder";
     },
     createFile() {
       this.showModal = true;
-      this.modalPrompt = "Введите название файла";
+      this.modalPrompt = "New File Name";
       this.modalType = "file";
     },
     handleCreate(newItem) {
@@ -235,7 +256,6 @@ export default {
       this.showModal = false;
     },
     selectFile() {
-      console.log("какашка");
       console.log("BEFORE state.selectedFile", this.$store.state.selectedFile);
       this.$store.dispatch("setSelectedFile", this.item);
       console.log("after state.selectedFile", this.$store.state.selectedFile);
@@ -250,7 +270,7 @@ export default {
     },
     createFileInItem(item) {},
     downloadFile() {
-      const content = this.item.content || ""; // Получаем содержимое файла
+      const content = this.item.content || "";
       const blob = new Blob([content], { type: "text/plain" });
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
@@ -285,34 +305,28 @@ export default {
         this.item.renaming = false;
         this.$store.dispatch("renameItem", this.item);
       } else {
-        // Handle empty name or cancel action
         this.item.renaming = false;
       }
     },
     deleteFile(item) {
-      if (item.type === 'file'){
+      if (item.type === "file") {
         this.$store.commit("setSelectedFile", this.item);
       }
-        if (item.type === 'folder') {
-        
+      if (item.type === "folder") {
         this.$store.commit("setSelectedFolder", item);
         this.$store.commit("deleteFile");
-        console.log("хочу удалиться")
       }
       if (this.$store.state.selectedFile) {
         const selectedFileId = this.$store.state.selectedFile.id;
         this.$store.commit("deleteFile");
-        console.log("хочу удалиться")
         this.$store.commit("setSelectedFile", null);
       }
-    
     },
   },
 };
 </script>
 
 <style>
-/* Add or adjust styles as needed */
 .folder .rename-input {
   width: auto;
 }
@@ -347,14 +361,15 @@ export default {
   right: 0;
   background-color: transparent;
   border: none;
-  display: none; /* Скрыть кнопку по умолчанию */
+  display: none;
 }
 .create-buttons {
+  overflow: hidden;
   position: absolute;
   display: flex;
   flex-direction: column;
-  background-color: rgba(197, 197, 197);
 
+  height: fit-content;
   border-radius: 4px;
   right: -6px;
   bottom: -30px;
@@ -366,6 +381,7 @@ export default {
   display: flex;
   flex-direction: row;
   border-bottom: 2px solid black;
+  background-color: rgba(197, 197, 197);
   font-size: 12px;
 }
 .create-btn {
@@ -404,7 +420,7 @@ export default {
   color: rgb(255, 255, 255);
   cursor: pointer;
 }
-.soso {
+.underline {
   position: absolute;
   height: 0.3px;
   left: -500px;
@@ -434,26 +450,26 @@ export default {
 }
 
 .download-btn {
-  display: none; /* Hide the button by default */
+  display: none;
 }
 
 .control:hover .download-btn {
-  display: block; /* Show the button when the control is hovered */
+  display: block;
 }
 .add_btn {
   background-image: url("C:\Users\PC\Desktop\vue\vue-code-collaborator\src\images\add_btn.png");
-  background-size: cover; /* или использовать contain, в зависимости от вашего предпочтения */
-  width: 13px; /* ширина кнопки будет равна ширине родительского контейнера */
-  height: 13px; /* высота кнопки будет равна высоте родительского контейнера */
+  background-size: cover;
+  width: 13px;
+  height: 13px;
   background-color: transparent;
   border: none;
   margin: 5px;
 }
 .download_btn {
   background-image: url("C:\Users\PC\Desktop\vue\vue-code-collaborator\src\images\downloading_btn.png");
-  background-size: cover; /* или использовать contain, в зависимости от вашего предпочтения */
-  width: 21px; /* ширина кнопки будет равна ширине родительского контейнера */
-  height: 18px; /* высота кнопки будет равна высоте родительского контейнера */
+  background-size: cover;
+  width: 21px;
+  height: 18px;
 
   background-color: transparent;
   border: none;
@@ -461,9 +477,9 @@ export default {
 
 .delete_btn {
   background-image: url("C:\Users\PC\Desktop\vue\vue-code-collaborator\src\images\delete_btn.png");
-  background-size: cover; /* или использовать contain, в зависимости от вашего предпочтения */
-  width: 12px; /* ширина кнопки будет равна ширине родительского контейнера */
-  height: 13px; /* высота кнопки будет равна высоте родительского контейнера */
+  background-size: cover;
+  width: 12px;
+  height: 13px;
   opacity: 0.3;
   background-color: transparent;
   border: none;
@@ -474,9 +490,9 @@ export default {
 
 .arrow_down {
   background-image: url("C:\Users\PC\Desktop\vue\vue-code-collaborator\src\images\arrow.png");
-  background-size: cover; /* или использовать contain, в зависимости от вашего предпочтения */
-  width: 14px; /* ширина кнопки будет равна ширине родительского контейнера */
-  height: 13px; /* высота кнопки будет равна высоте родительского контейнера */
+  background-size: cover;
+  width: 14px;
+  height: 13px;
   opacity: 0.3;
   background-color: transparent;
   border: none;
@@ -484,9 +500,9 @@ export default {
 }
 .arrow_right {
   background-image: url("C:\Users\PC\Desktop\vue\vue-code-collaborator\src\images\arrow.png");
-  background-size: cover; /* или использовать contain, в зависимости от вашего предпочтения */
-  width: 14px; /* ширина кнопки будет равна ширине родительского контейнера */
-  height: 13px; /* высота кнопки будет равна высоте родительского контейнера */
+  background-size: cover;
+  width: 14px;
+  height: 13px;
   opacity: 0.3;
   background-color: transparent;
   border: none;

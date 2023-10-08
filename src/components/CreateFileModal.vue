@@ -6,17 +6,17 @@
         s
         v-if="itemType !== 'file'"
         v-model="itemName"
-        placeholder="Новая папка"
+        placeholder="New folder"
         @keyup.enter="confirmCreation"
       />
       <input
         v-else
         v-model="itemName"
-        placeholder="Новый файл.txt"
+        placeholder="NewFile.txt"
         @keyup.enter="confirmCreation"
       />
-      <button @click="confirmCreation">Создать</button>
-      <button @click="cancelCreation">Отмена</button>
+      <button @click="confirmCreation">Create</button>
+      <button @click="cancelCreation">Cancel</button>
     </div>
   </div>
 </template>
@@ -27,6 +27,10 @@ export default {
     visible: Boolean,
     prompt: String,
     itemType: String,
+    level: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -44,7 +48,6 @@ export default {
       this.itemName = "";
     },
     createFolder() {
-      // Создание новой папки
       const newFolder = {
         type: "folder",
         name: this.itemName,
@@ -54,11 +57,12 @@ export default {
       };
 
       if (newFolder.name.trim() === "") {
-        // Проверка на пустой ввод
-        newFolder.name = "Новая папка";
+        newFolder.name = "New Folder";
       }
-
-      this.$emit("create", newFolder);
+      if (this.$store.state.expandedFolder.level + 1 < 7) {
+        newFolder.level = this.$store.state.expandedFolder.level + 1;
+        this.$emit("create", newFolder);
+      }
     },
     createFile() {
       this.$store.dispatch("createFileInRepository", this.itemName);

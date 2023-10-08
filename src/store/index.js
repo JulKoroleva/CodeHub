@@ -36,7 +36,6 @@ function prettySortFolderElements(folderArray) {
   return sortedAllElements;
 }
 
-
 const store = createStore({
   modules: {
     comment: commentStore,
@@ -57,10 +56,10 @@ const store = createStore({
     createRepository(state, name) {
       const newRepository = {
         id: generateUniqueId(),
-        name: name || "Новый репозиторий", // если name не передан, используй дефолтное значение
+        name: name || "New Repository",
         files: [],
-
-          children: [],
+        level: 0,
+        children: [],
         type: "folder",
       };
       state.repositories.push(newRepository);
@@ -69,27 +68,17 @@ const store = createStore({
       if (state.selectedRepository) {
         const newFolder = {
           id: generateUniqueId(),
-          name: folderName || "Новая папка",
+          name: folderName || "New Folder",
           type: "folder",
-          files: [], 
-          children: []
+          files: [],
+          children: [],
         };
-        state.selectedRepository.files.push(newFolder);
-        state.selectedRepository.files.sort((a, b) => {
-          if (a.type === "folder" && b.type !== "folder") {
-            return -1; // Папки всегда выше файлов
-          } else if (a.type !== "folder" && b.type === "folder") {
-            return 1; // Файлы всегда ниже папок
-          } else {
-            return 0; // Не менять порядок для элементов одного типа
-          }
-        });
       }
     },
 
     createFileInRepository(state, fileName) {
       if (state.selectedRepository) {
-        const name = fileName.trim() !== "" ? fileName : "Новый файл.txt";
+        const name = fileName.trim() !== "" ? fileName : "NewFile.txt";
         const lastModified = new Date().getTime();
         const newFile = {
           id: generateUniqueId(),
@@ -110,7 +99,6 @@ const store = createStore({
       console.log("folder store:", folder);
 
       if (folder && folder.type === "folder" && folder.children !== null) {
-        // Check if folder.files is an array before sorting
         if (Array.isArray(folder.children)) {
           folder.children = prettySortFolderElements(folder);
         } else {
@@ -164,67 +152,32 @@ const store = createStore({
       state.comments.push(comment);
     },
 
-    // deleteFileFromRepositories(state, fileId) {
-    //   const deleteFileRecursively = (array) => {
-    //     if (!array || !Array.isArray(array)) {
-    //       console.log('это не массив')
-    //       return;
-    //     }
-
-    //     for (let i = 0; i < array.length; i++) {
-    //       const item = array[i];
-
-    //       if (item && item.id === fileId) {
-    //         // Удалить выбранный файл из родительского массива
-    //         array.splice(i, 1);
-    //         return;
-    //       }
-
-    //       if (item && item.children && item.children.length > 0) {
-    //         deleteFileRecursively(item.children);
-    //       }
-    //     }
-    //   };
-
-    //   const traverseRepositories = (repositories) => {
-    //     if (!repositories || !Array.isArray(repositories)) {
-    //       return;
-    //     }
-
-    //     repositories.forEach((repository) => {
-    //       deleteFileRecursively(repository.files);
-
-    //       if (repository.children && repository.children.length > 0) {
-    //         traverseRepositories(repository.children);
-    //       }
-    //     });
-    //   };
-
-    //   traverseRepositories(state.repositories);
-    // },
-
     deleteFile(state) {
-      console.log('start:')
-      console.log('selectedRepository:', state.selectedRepository)
-      if (state.selectedRepository && state.selectedFile || state.expandedFolder) {
-        console.log('state.selectedFile:', state.selectedFile)
+      console.log("start:");
+      console.log("selectedRepository:", state.selectedRepository);
+      if (
+        (state.selectedRepository && state.selectedFile) ||
+        state.expandedFolder
+      ) {
+        console.log("state.selectedFile:", state.selectedFile);
         const repository = state.selectedRepository;
-        console.log('repository:', repository)
+        console.log("repository:", repository);
         const removeFile = (entity) => {
-          console.log('enter to remove file:', entity)
+          console.log("enter to remove file:", entity);
           if (Array.isArray(entity)) {
-            console.log('entity is array:', entity)
+            console.log("entity is array:", entity);
             entity.forEach((child, index) => {
-              
-              if (child.type === 'folder') {
-                
+              if (child.type === "folder") {
                 if (child === state.expandedFolder) {
-                  console.log('child === state.expandedFolder', entity)
+                  console.log("child === state.expandedFolder", entity);
                   entity.splice(index, 1);
                 } else {
                   removeFile(child.children);
                 }
-              } else if (child.type === 'text/plain' && child === state.selectedFile) {
+              } else if (
+                child.type === "text/plain" &&
+                child === state.selectedFile
+              ) {
                 entity.splice(index, 1);
               } else {
                 console.log(`ERROR: Unknown type ${child.type}`);
@@ -234,7 +187,7 @@ const store = createStore({
             console.log(`ERROR: entity is not an array`);
           }
         };
-    
+
         removeFile(repository.children);
       }
     },
@@ -246,8 +199,6 @@ const store = createStore({
     createFolderInRepository({ commit, state }, folderName) {
       commit("createFolderInRepository", folderName);
     },
-
-    // Действие для создания файла в выбранном репозитории
     createFileInRepository({ commit, state }, fileName) {
       commit("createFileInRepository", fileName);
     },

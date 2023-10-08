@@ -22,7 +22,7 @@
           :disabled="!$store.state.selectedFile"
           style="width: 100%; background-color: transparent; border: none"
         >
-          Сохранить
+          SAVE
         </button>
       </div>
     </div>
@@ -34,16 +34,15 @@
 
 <script>
 import Codemirror from "codemirror-editor-vue3";
-
 // placeholder
 import "codemirror/addon/display/placeholder.js";
-
 // language
 import "codemirror/mode/javascript/javascript.js";
 // placeholder
 import "codemirror/addon/display/placeholder.js";
 // theme
 import "codemirror/theme/dracula.css";
+
 
 import { ref } from "vue";
 export default {
@@ -77,7 +76,7 @@ for (; i < 9; i++) {
   watch: {
     "$store.state.selectedFile": function (newFile) {
       if (newFile && newFile.type === "text/plain") {
-        this.textarea = newFile.content || ""; // Загрузить содержимое файла в текстовое поле
+        this.textarea = newFile.content || ""; 
       }
     },
   },
@@ -86,8 +85,8 @@ for (; i < 9; i++) {
       if (file && file.type === "text/plain") {
         const codeMirrorInstance = CodeMirror(this.$refs.codeMirror, {
           value: file.content || "",
-          mode: "text/plain", // Установите нужный режим
-          lineNumbers: true, // Опционально: показать номера строк
+          mode: "text/plain", 
+          lineNumbers: true, 
         });
 
         codeMirrorInstance.on("change", (editor) => {
@@ -102,7 +101,7 @@ for (; i < 9; i++) {
 
     change(newValue) {
       this.$store.commit("updateFileContent", newValue);
-      this.isFileChanged = true; // Set the flag when the text changes
+      this.isFileChanged = true;
     },
   },
   computed: {
@@ -120,7 +119,7 @@ for (; i < 9; i++) {
 
 <style scoped>
 .code-editor__container {
-  width: 70vw;
+  width: 71vw;
   min-height: 70vh;
   text-align: left;
   margin-right: 10px;

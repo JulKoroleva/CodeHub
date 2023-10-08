@@ -1,26 +1,25 @@
 <template>
+  
   <div id="app">
-    <router-link to="/">Домой</router-link>
-    <router-link to="/repository">Репозиторий</router-link>
-    <router-view />
+   
+  <router-view />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App',
+  name: "App",
 };
 </script>
 
 <style>
-body{
+body {
   background-color: #41434d;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   text-align: center;
   color: #777f86;
-  margin-top: 60px;
 }
 
 router-link {
@@ -29,17 +28,18 @@ router-link {
   color: #777f86;
 }
 
-ul{
+ul {
   list-style-type: none;
   align-content: flex-start;
 }
 
-li{
-  
+li {
 }
 
-input:focus, textarea:focus, select:focus {
-    outline: none;
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
 }
 
 button:hover {

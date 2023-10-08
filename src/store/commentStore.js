@@ -1,4 +1,3 @@
-// CommentStore.js
 export const commentStore = {
     state: {
       comments: [],
