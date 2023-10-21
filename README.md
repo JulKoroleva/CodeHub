@@ -1,6 +1,9 @@
 <div align="center">
   <h1>CodeHub</h1>
   <h3>  Online code editor </h3>
+	
+<a href="https://julkoroleva.github.io/CodeHub/" target="_blank" style="text-decoration:none;" >VIEW THE RUNNING APP</a>
+
 </div> 
 
 Welcome to CodeHub! It's a mini-site that provides a convenient environment for writing and saving your code right in your browser. Here's a quick overview of the main features:
